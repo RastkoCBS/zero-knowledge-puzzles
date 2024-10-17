@@ -9,8 +9,12 @@ pragma circom 2.1.4;
 // HINT:NEGATION
 
 template NotEqual() {
+    signal input a[2];
+    signal output c;
 
-    // Your code here.
+    signal not_equal <-- a[0]!=a[1];
+
+   c <== not_equal;
    
 }
 
