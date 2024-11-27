@@ -73,9 +73,26 @@ template Sudoku () {
     3 === row4[3].out + row4[2].out + row4[1].out + row4[0].out; 
 
     // Write your solution from here.. Good Luck!
+    // FIXME: Check columns not all numbers
+    component equal[16];
+    component finalCheck = IsEqual();
+
+    for(var i = 0; i < 16; i++){
+        equal[i] = IsEqual();
+
+        equal[i].in[0] <== solution[i];
+        equal[i].in[1] <== question[i];
+    }
+
+    signal sum;
+    for(var j = 0; j < 16; j++){
+        sum = equal[j].out;
+    }
+
+    finalCheck.in[0] <== sum;
+    finalCheck.in[1] <== 16;
     
-    
-   
+    out <== finalCheck.out;
 }
 
 
