@@ -73,28 +73,39 @@ template Sudoku () {
     3 === row4[3].out + row4[2].out + row4[1].out + row4[0].out; 
 
     // Write your solution from here.. Good Luck!
-    // FIXME: Check columns not all numbers
-    component equal[16];
-    component finalCheck = IsEqual();
+    signal column[4];
+    signal row[4];
 
-    for(var i = 0; i < 16; i++){
-        equal[i] = IsEqual();
+    component colCheck[4];
+    component rowCheck[4];
 
-        equal[i].in[0] <== solution[i];
-        equal[i].in[1] <== question[i];
+    for (var p = 0; p < 4; p++) {
+        var sum = 0; 
+        for (var q = 0; q < 4; q++) {
+            sum += solution[q * 4 + p];
+        }
+        column[p] <== sum;
+        colCheck[p] = IsEqual();
+        colCheck[p].in[0] <== column[p];
+        colCheck[p].in[1] <== 10;
     }
 
-    signal sum;
-    for(var j = 0; j < 16; j++){
-        sum = equal[j].out;
+    for (var p = 0; p < 4; p++) {
+        var sum = 0;
+        for (var q = 0; q < 4; q++) {
+            sum += solution[p * 4 + q];
+        }
+        row[p] <== sum;
+        rowCheck[p] = IsEqual();
+        rowCheck[p].in[0] <== row[p];
+        rowCheck[p].in[1] <== 10;
     }
 
-    finalCheck.in[0] <== sum;
-    finalCheck.in[1] <== 16;
-    
-    out <== finalCheck.out;
+    signal sum <== colCheck[0].out + colCheck[1].out + colCheck[2].out + colCheck[3].out + rowCheck[0].out + rowCheck[1].out + rowCheck[2].out + rowCheck[3].out;
+    component equal = IsEqual();
+    equal.in[0] <== sum;
+    equal.in[1] <== 8;
+    out <== equal.out; 
 }
 
-
 component main = Sudoku();
-
